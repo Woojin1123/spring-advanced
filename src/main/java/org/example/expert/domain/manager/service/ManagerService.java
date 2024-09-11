@@ -39,7 +39,8 @@ public class ManagerService {
     /* 2-4 유닛 테스트 - 3
     todo의 user가 null이기 때문에 getId를 수행할 때 NPE throw 방지
     */
-    if (ObjectUtils.isEmpty(todo.getUser()) || !ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
+    if (ObjectUtils.isEmpty(todo.getUser()) || !ObjectUtils.nullSafeEquals(user.getId(),
+        todo.getUser().getId())) {
       throw new InvalidRequestException("담당자를 등록하려고 하는 유저가 일정을 만든 유저가 유효하지 않습니다.");
     }
 
