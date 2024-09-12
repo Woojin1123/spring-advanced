@@ -1,5 +1,7 @@
 package org.example.expert.domain.comment.service;
 
+import static org.example.expert.SharedData.AUTH_USER;
+import static org.example.expert.SharedData.TEST_USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -28,6 +30,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class CommentServiceTest {
@@ -42,6 +45,26 @@ class CommentServiceTest {
   @Nested
   @DisplayName("Comment_등록")
   class CommentRegistration {
+
+    @Test
+    public void 할일의_담당자가_아니면_IRE_에러를_던진다() {
+      //given
+      long todoId = 1;
+      AuthUser authUser = AUTH_USER;
+      User user = TEST_USER;
+      ReflectionTestUtils.setField(user, "id", 2L);
+
+      CommentSaveRequest request = new CommentSaveRequest("contents");
+      Todo todo = new Todo("title", "title", "contents", user);
+
+      given(todoRepository.findById(anyLong())).willReturn(Optional.of(todo));
+      //when
+      InvalidRequestException exception = assertThrows(InvalidRequestException.class, () -> {
+        commentService.saveComment(authUser, todoId, request);
+      });
+      // then
+      assertEquals("할일의 담당자가 아니면 댓글을 달 수 없습니다.", exception.getMessage());
+    }
 
     @Test
     public void comment_등록_중_할일을_찾지_못해_에러가_발생한다() {
@@ -91,14 +114,14 @@ class CommentServiceTest {
   class CommentInquiry {
 
     @Test
-    public void 댓글_조회_성공(){
+    public void 댓글_조회_성공() {
       //given
       long todoId = 1;
-      AuthUser authUser = new AuthUser(1L,"email@naver.com",UserRole.USER);
+      AuthUser authUser = new AuthUser(1L, "email@naver.com", UserRole.USER);
       User user = User.fromAuthUser(authUser);
       Todo todo = new Todo("title", "title", "contents", user);
-      Comment comment1 = new Comment("content1",user,todo);
-      Comment comment2 = new Comment("content2",user,todo);
+      Comment comment1 = new Comment("content1", user, todo);
+      Comment comment2 = new Comment("content2", user, todo);
       List<Comment> commentList = new ArrayList<>();
       commentList.add(comment1);
       commentList.add(comment2);
