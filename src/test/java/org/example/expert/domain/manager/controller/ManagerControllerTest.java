@@ -4,6 +4,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -126,6 +128,7 @@ public class ManagerControllerTest {
         delete("/todos/{todoId}/managers/{managerId}", todoId, managerId));
     //then
     resultActions.andExpect(status().isOk());
+    verify(managerService, times(1)).deleteManager(any(), anyLong(), anyLong());
 
   }
 }

@@ -2,6 +2,8 @@ package org.example.expert.domain.comment.controller;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,5 +33,6 @@ public class CommentAdminControllerTest {
     ResultActions resultActions = mockMvc.perform(delete("/admin/comments/{commentId}", commentId));
     //then
     resultActions.andExpect(status().isOk());
+    verify(commentAdminService, times(1)).deleteComment(anyLong());
   }
 }
