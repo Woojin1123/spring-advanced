@@ -29,6 +29,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.util.ReflectionTestUtils;
 
 @ExtendWith(MockitoExtension.class)
@@ -111,7 +112,8 @@ public class TodoServiceTest {
       Todo todo = TEST_TODO;
       List<Todo> todos = new ArrayList<>();
       todos.add(todo);
-      Page<Todo> todoPage = new PageImpl<>(todos);
+      PageRequest pageRequest = PageRequest.of(1,10);
+      Page<Todo> todoPage = new PageImpl<>(todos,pageRequest,todos.size());
       ReflectionTestUtils.setField(todo,"id",todoId);
 
       given(todoRepository.findAllByOrderByModifiedAtDesc(any())).willReturn(todoPage);

@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -98,7 +99,8 @@ public class CommentControllerTest {
     ResultActions resultActions = mockMvc.perform(
         get("/todos/{todoId}/comments", todoId));
     //then
-    resultActions.andExpect(status().isOk())
+    resultActions.andDo(print())
+        .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].id").value(commentResponse1.getId()))
         .andExpect(jsonPath("$[0].contents").value(commentResponse1.getContents()))
         .andExpect(jsonPath("$[0].user.email").value(commentResponse1.getUser().getEmail()))

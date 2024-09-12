@@ -9,6 +9,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -107,7 +108,8 @@ public class ManagerControllerTest {
     ResultActions resultActions = mockMvc.perform(get("/todos/{todoId}/managers", todoId));
 
     //then
-    resultActions.andExpect(status().isOk())
+    resultActions.andDo(print())
+        .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].id").value(managerResponse1.getId()))
         .andExpect(jsonPath("$[0].user.email").value(managerResponse1.getUser().getEmail()))
         .andExpect(jsonPath("$[0].user.id").value(managerResponse1.getUser().getId()))
