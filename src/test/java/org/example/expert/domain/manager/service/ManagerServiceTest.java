@@ -246,7 +246,7 @@ class ManagerServiceTest {
       given(userRepository.findById(anyLong())).willReturn(Optional.of(user));
       given(todoRepository.findById(anyLong())).willReturn(Optional.of(todo));
       given(managerRepository.findById(anyLong())).willReturn(Optional.of(manager));
-      //when
+      // when & then
       InvalidRequestException exception = assertThrows(InvalidRequestException.class,
           () -> managerService.deleteManager(authUser,todoId,managerId));
       assertEquals("해당 일정에 등록된 담당자가 아닙니다.", exception.getMessage());
